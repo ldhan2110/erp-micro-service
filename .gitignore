@@ -9,8 +9,13 @@ gradle-app.setting
 
 # Compiled class files
 *.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
 
-# Log files
+# Logs
 *.log
 logs/
 *.log.*
@@ -23,11 +28,9 @@ logs/
 *.zip
 *.tar.gz
 *.rar
-!gradle/wrapper/gradle-wrapper.jar
 
 # Virtual machine crash logs
 hs_err_pid*
-replay_pid*
 
 # Maven (if used)
 target/
@@ -41,19 +44,7 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-# Eclipse
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings/
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-.metadata
-.recommenders
-
-# IntelliJ IDEA
+# IDE - IntelliJ IDEA
 .idea/
 *.iws
 *.iml
@@ -61,51 +52,79 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-.idea_modules/
 
-# NetBeans
+# IDE - Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# IDE - NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-# VS Code
+# IDE - VS Code
 .vscode/
 *.code-workspace
 
+# IDE - Other
+*.swp
+*.swo
+*~
+.DS_Store
+
 # Spring Boot
 application-local.properties
-application-local.yml
 application-dev.properties
-application-dev.yml
 application-prod.properties
-application-prod.yml
-*.pid
-*.orig
+application-*.yml
+!application.yml
+!application.properties
 
-# Application specific
-keys/
-*.pem
-*.key
+# Sensitive files - Keys, Certificates, Secrets
+**/keys/
+**/*.pem
+**/*.key
+**/*.p12
+**/*.jks
+**/*.keystore
+**/*.truststore
 *.crt
-*.jks
-*.p12
+*.cer
+*.pfx
+secrets/
+.env
+.env.local
+.env.*.local
+
+# Local libraries (if not using a repository)
+libs/
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+*.mv.db
+*.trace.db
 
 # OS Files
 # Windows
 Thumbs.db
-Thumbs.db:encryptable
 ehthumbs.db
-ehthumbs_vista.db
-*.stackdump
-[Dd]esktop.ini
+Desktop.ini
 $RECYCLE.BIN/
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
 *.lnk
 
 # macOS
@@ -119,19 +138,22 @@ Icon
 
 # Linux
 *~
-.fuse_hidden*
 .directory
 .Trash-*
-.nfs*
 
 # Temporary files
 *.tmp
 *.temp
+*.bak
+*.backup
 *.swp
 *.swo
 *~
-*.bak
-*.cache
+
+# Application specific
+HELP.md
+.npm
+.node_repl_history
 
 # Test coverage
 .nyc_output/
@@ -139,26 +161,15 @@ coverage/
 *.lcov
 
 # Dependency directories
-node_modules/ (if any frontend components)
+node_modules/
 
-# Environment variables
-.env
-.env.local
-.env.*.local
+# Optional npm cache directory
+.npm
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
+# Optional eslint cache
+.eslintcache
 
-# Docker
-.dockerignore
-docker-compose.override.yml
-
-# Kubernetes
-*.kubeconfig
-
-# Backup files
-*.backup
-*.old
-
+# Microservices specific
+**/logs/
+**/tmp/
+**/temp/
