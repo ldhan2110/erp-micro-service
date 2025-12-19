@@ -31,6 +31,7 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.clt.erp.auth.service.KeyPairService;
 
@@ -48,6 +49,9 @@ public class AuthorizationServerConfig {
 
     @Autowired
     private KeyPairService keyPairService;
+    
+    @Autowired
+    private CorsConfigurationSource corsConfigurationSource;
     
     @Value("${oauth2.client.secret:{noop}secret}")
     private String clientSecret;
@@ -68,6 +72,7 @@ public class AuthorizationServerConfig {
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         
         http.securityMatcher(endpointsMatcher)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().authenticated()
                 )

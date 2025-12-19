@@ -3,30 +3,29 @@ package com.clt.erp.api_gateway.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.http.HttpStatus;
 
 /**
  * Security configuration for API Gateway.
  * Configures OAuth2 Resource Server to validate JWT tokens from auth-service.
+ * Uses reactive Spring Security for WebFlux-based Spring Cloud Gateway.
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebFluxSecurity
 public class SecurityConfig {
 
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri:http://localhost:8081}")
     private String issuerUri;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
-            .authorizeHttpRequests(auth -> auth
+            .authorizeExchange(exchanges -> exchanges
                 // Public endpoints - OAuth2 and login endpoints
-                .requestMatchers(
+                .pathMatchers(
                     "/oauth2/**",
                     "/login",
                     "/logout",
@@ -38,7 +37,7 @@ public class SecurityConfig {
                     "/error"
                 ).permitAll()
                 // All other endpoints require authentication
-                .anyRequest().authenticated()
+                .anyExchange().authenticated()
             )
             // Configure OAuth2 Resource Server with JWT
             .oauth2ResourceServer(oauth2 -> oauth2
@@ -46,15 +45,14 @@ public class SecurityConfig {
                     .jwkSetUri(issuerUri + "/.well-known/jwks.json")
                 )
             )
-            // Stateless session - JWT tokens are used
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
             // Disable CSRF for stateless API (JWT tokens are used)
             .csrf(csrf -> csrf.disable())
             // Return 401 for unauthenticated requests instead of redirecting to login
             .exceptionHandling(exceptions -> exceptions
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .authenticationEntryPoint((exchange, ex) -> {
+                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                    return exchange.getResponse().setComplete();
+                })
             );
 
         return http.build();
