@@ -1,0 +1,45 @@
+import { defineAbility } from '@casl/ability';
+import React from 'react';
+
+// Define Ability Context
+export const ability = defineAbility(() => { });
+export const AbilityContext = React.createContext(ability);
+
+// Default VIEW Actions
+export const VIEW_PERMISSION_CODE = 'VIEW';
+
+// Define App Actions & Subject
+export enum ABILITY_ACTION {
+	VIEW = VIEW_PERMISSION_CODE,
+	ADD = 'ADD',
+	SAVE = 'SAVE',
+	VIEW_DETAIL = 'VIEW_DETAIL',
+	RESET_PASSWORD = 'RESET_PASSWORD',
+	EXPORT = 'EXPORT',
+	DELETE = 'DELETE',
+
+	// ROLE & PERMISSION
+	VIEW_PROGRAM = 'VIEW_PROGRAM',
+	ADD_PROGRAM = 'ADD_PROGRAM',
+	SAVE_PROGRAM = 'SAVE_PROGRAM',
+	DELETE_PROGRAM = 'DELETE_PROGRAM',
+	VIEW_PROGRAM_DETAIL = 'VIEW_PROGRAM_DETAIL',
+
+	ADD_PERMISSION = 'ADD_PERMISSION',
+	DELETE_PERMISSION = 'DELETE_PERMISSION',
+	SAVE_PERMISSION = 'SAVE_PERMISSION',
+
+	// BATCH JOB MANAGEMENT
+	RESUME = 'RESUME',
+	PAUSE = 'PAUSE'
+}
+
+export enum ABILITY_SUBJECT {
+	USER_MANAGEMENT = 'ADM_0001',
+	ROLE_MANAGEMENT = 'ADM_0002',
+
+	MASTER_CODE_MANAGEMENT = 'MST_0001',
+
+	MESSAGE_MANAGEMENT = 'SYS_0001',
+	BATCH_JOB_MANAGEMENT = 'SYS_0002',
+}

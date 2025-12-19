@@ -1,3 +1,7 @@
+# ============================================
+# Java / Gradle / Spring Boot
+# ============================================
+
 # Gradle
 .gradle/
 build/
@@ -5,7 +9,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 gradle-app.setting
-!gradle-wrapper.jar
 
 # Compiled class files
 *.class
@@ -13,21 +16,7 @@ gradle-app.setting
 *.war
 *.ear
 *.nar
-hs_err_pid*
-
-# Logs
-*.log
-logs/
-*.log.*
-
-# Package Files
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+!gradle/wrapper/gradle-wrapper.jar
 
 # Virtual machine crash logs
 hs_err_pid*
@@ -44,7 +33,72 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-# IDE - IntelliJ IDEA
+# Spring Boot
+application-local.properties
+application-dev.properties
+application-prod.properties
+application-*.yml
+!application.yml
+!application.properties
+
+# ============================================
+# Frontend / Node.js / TypeScript / Vite
+# ============================================
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Build outputs
+dist/
+dist-ssr/
+*.local
+.vite/
+.vite-ssg-*
+
+# TypeScript
+*.tsbuildinfo
+*.tsbuildinfo.*
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+yarn-error.log
+.yarn-integrity
+
+# npm
+.npm
+.npmrc
+package-lock.json
+npm-debug.log*
+lerna-debug.log*
+
+# pnpm
+.pnpm-debug.log*
+
+# ESLint
+.eslintcache
+
+# Prettier
+.prettierignore
+
+# Husky
+.husky/_/
+
+# ============================================
+# IDE Configuration
+# ============================================
+
+# IntelliJ IDEA
 .idea/
 *.iws
 *.iml
@@ -53,7 +107,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-# IDE - Eclipse
+# Eclipse
 .apt_generated
 .classpath
 .factorypath
@@ -65,30 +119,54 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-# IDE - NetBeans
+# NetBeans
 /nbproject/private/
 /nbbuild/
-/dist/
 /nbdist/
 /.nb-gradle/
 
-# IDE - VS Code
+# VS Code
 .vscode/
 *.code-workspace
 
-# IDE - Other
+# Other editors
 *.swp
 *.swo
 *~
 .DS_Store
 
-# Spring Boot
-application-local.properties
-application-dev.properties
-application-prod.properties
-application-*.yml
-!application.yml
-!application.properties
+# ============================================
+# Logs and Temporary Files
+# ============================================
+
+# Logs
+*.log
+logs/
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pnpm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.cache
+
+# ============================================
+# Environment and Secrets
+# ============================================
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Sensitive files - Keys, Certificates, Secrets
 **/keys/
@@ -102,16 +180,11 @@ application-*.yml
 *.cer
 *.pfx
 secrets/
-.env
-.env.local
-.env.*.local
 
-# Local libraries (if not using a repository)
-libs/
-*.jar
-!gradle/wrapper/gradle-wrapper.jar
+# ============================================
+# Database Files
+# ============================================
 
-# Database
 *.db
 *.sqlite
 *.sqlite3
@@ -119,7 +192,33 @@ libs/
 *.mv.db
 *.trace.db
 
+# ============================================
+# Package Files
+# ============================================
+
+*.zip
+*.tar.gz
+*.rar
+
+# ============================================
+# Test Coverage
+# ============================================
+
+.nyc_output/
+coverage/
+*.lcov
+.nyc_output
+coverage
+*.coverage
+htmlcov/
+.pytest_cache/
+.coverage
+.coverage.*
+
+# ============================================
 # OS Files
+# ============================================
+
 # Windows
 Thumbs.db
 ehthumbs.db
@@ -137,39 +236,24 @@ Icon
 .Trashes
 
 # Linux
-*~
 .directory
 .Trash-*
 
-# Temporary files
-*.tmp
-*.temp
-*.bak
-*.backup
-*.swp
-*.swo
-*~
+# ============================================
+# Application Specific
+# ============================================
 
-# Application specific
 HELP.md
-.npm
 .node_repl_history
 
-# Test coverage
-.nyc_output/
-coverage/
-*.lcov
-
-# Dependency directories
-node_modules/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
+# Local libraries (if not using a repository)
+libs/
 
 # Microservices specific
 **/logs/
 **/tmp/
 **/temp/
+
+# OpenAPI generated files (if generated locally)
+**/generated/
+**/openapi-generated/
