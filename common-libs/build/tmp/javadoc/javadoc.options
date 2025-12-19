@@ -1,0 +1,13 @@
+-classpath 'C:\\Users\\an.le\\Desktop\\Project\\LBU-ERP\\erp\\common-libs\\build\\classes\\java\\main;C:\\Users\\an.le\\Desktop\\Project\\LBU-ERP\\erp\\common-libs\\build\\resources\\main;C:\\Users\\an.le\\.gradle\\caches\\modules-2\\files-2.1\\org.projectlombok\\lombok\\1.18.34\\ec547ef414ab1d2c040118fb9c1c265ada63af14\\lombok-1.18.34.jar;C:\\Users\\an.le\\.gradle\\caches\\modules-2\\files-2.1\\com.fasterxml.jackson.core\\jackson-annotations\\2.18.2\\985d77751ebc7fce5db115a986bc9aa82f973f4a\\jackson-annotations-2.18.2.jar;C:\\Users\\an.le\\.gradle\\caches\\modules-2\\files-2.1\\jakarta.validation\\jakarta.validation-api\\3.1.0\\846b536eff8a32c1b91fdeb3c9c5b6c39916767d\\jakarta.validation-api-3.1.0.jar'
+-d 'C:\\Users\\an.le\\Desktop\\Project\\LBU-ERP\\erp\\common-libs\\build\\docs\\javadoc'
+-doctitle 'common-libs 0.0.1-SNAPSHOT API'
+-notimestamp 
+-quiet 
+-windowtitle 'common-libs 0.0.1-SNAPSHOT API'
+'C:\\Users\\an.le\\Desktop\\Project\\LBU-ERP\\erp\\common-libs\\src\\main\\java\\com\\clt\\erp\\common\\dto\\BaseDto.java'
+'C:\\Users\\an.le\\Desktop\\Project\\LBU-ERP\\erp\\common-libs\\src\\main\\java\\com\\clt\\erp\\common\\dto\\DynamicFilterDto.java'
+'C:\\Users\\an.le\\Desktop\\Project\\LBU-ERP\\erp\\common-libs\\src\\main\\java\\com\\clt\\erp\\common\\dto\\ErrorResponseDto.java'
+'C:\\Users\\an.le\\Desktop\\Project\\LBU-ERP\\erp\\common-libs\\src\\main\\java\\com\\clt\\erp\\common\\dto\\PaginationDto.java'
+'C:\\Users\\an.le\\Desktop\\Project\\LBU-ERP\\erp\\common-libs\\src\\main\\java\\com\\clt\\erp\\common\\dto\\SortDto.java'
+'C:\\Users\\an.le\\Desktop\\Project\\LBU-ERP\\erp\\common-libs\\src\\main\\java\\com\\clt\\erp\\common\\dto\\SuccessDto.java'
+'C:\\Users\\an.le\\Desktop\\Project\\LBU-ERP\\erp\\common-libs\\src\\main\\java\\com\\clt\\erp\\common\\exception\\BizException.java'
