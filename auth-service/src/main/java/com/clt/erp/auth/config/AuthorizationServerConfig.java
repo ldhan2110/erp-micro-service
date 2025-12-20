@@ -274,7 +274,7 @@ public class AuthorizationServerConfig {
      */
     private OidcUserInfo mapUserInfoFromContext(OidcUserInfoAuthenticationContext  context) {
         try {
-            // Access getAuthorization() method via reflection
+            // Try to extract user info from authorization
             OAuth2Authorization authorization = context.getAuthorization();
             if (authorization != null) {
                 Object principal = authorization.getAttribute("java.security.Principal");
