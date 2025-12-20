@@ -9,7 +9,7 @@
 export const oidcConfiguration = {
   // OAuth2/OIDC authorization server URL (issuer URI)
   // This should match the issuer URI configured in auth-service
-  authority: import.meta.env.VITE_OIDC_AUTHORITY || 'http://localhost:8080',
+  authority: import.meta.env.VITE_OIDC_AUTHORITY || 'http://localhost:8081',
   
   // Client ID registered with the authorization server
   // Must match the client_id in AuthorizationServerConfig (erp-frontend)

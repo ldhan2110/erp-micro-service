@@ -36,6 +36,10 @@ public class GatewayConfig {
                         .path("/.well-known/openid-configuration")
                         .uri("lb://auth-service"))
                 
+                .route("oauth2-userinfo", r -> r
+                        .path("/userinfo")
+                        .uri("lb://auth-service"))
+                
                 // HRM Service - forwards Authorization header
                 .route("hrm-service", r -> r
                         .path("/api/hrm/**")
