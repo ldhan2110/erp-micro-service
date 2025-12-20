@@ -8,7 +8,7 @@ import { useOidc } from '@axa-fr/react-oidc'
  * The OIDC library automatically processes the authorization code and exchanges it for tokens.
  */
 export function Callback() {
-  const { isAuthenticated, oidcUser } = useOidc()
+  const { isAuthenticated } = useOidc()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [error, setError] = useState<string | null>(null)
@@ -24,10 +24,10 @@ export function Callback() {
     }
 
     // Once authentication is complete, redirect to home page
-    if (isAuthenticated && oidcUser) {
+    if (isAuthenticated) {
       navigate('/', { replace: true })
     }
-  }, [isAuthenticated, oidcUser, navigate, searchParams])
+  }, [isAuthenticated, navigate, searchParams])
 
   if (error) {
     return (

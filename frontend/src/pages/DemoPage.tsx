@@ -1,15 +1,53 @@
-import { useOidc } from '@axa-fr/react-oidc'
+import { useOidc, useOidcUser } from '@axa-fr/react-oidc'
 import { LogoutButton } from '../components/LogoutButton'
 
 /**
  * DemoPage component that displays user information after successful authentication.
+ * This page shows the user's profile information extracted from the OIDC user object.
  */
 export function DemoPage() {
   const { isAuthenticated } = useOidc()
+  const { oidcUser } = useOidcUser()
 
+  // Show loading state if not authenticated
   if (!isAuthenticated) {
-    return <div>Loading...</div>
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontFamily: 'system-ui, -apple-system, sans-serif'
+      }}>
+        <div>Redirecting to login...</div>
+      </div>
+    )
   }
+
+  // Show loading state while user data is being fetched
+  if (!oidcUser) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontFamily: 'system-ui, -apple-system, sans-serif'
+      }}>
+        <div>Loading user information...</div>
+      </div>
+    )
+  }
+
+  // Extract user information from the OIDC user object
+  // The oidcUser object has a 'profile' property containing user claims
+  const profile = oidcUser.profile || {}
+  const subject = profile.sub || 'Not available'
+  const email = profile.email || 'Not provided'
+  const name = profile.name || profile.preferred_username || 'Not provided'
+  const givenName = profile.given_name || 'Not provided'
+  const familyName = profile.family_name || 'Not provided'
+  const emailVerified = profile.email_verified ? 'Yes' : 'No'
 
   return (
     <div style={{
@@ -24,6 +62,14 @@ export function DemoPage() {
         padding: '2rem',
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
       }}>
+        <h1 style={{
+          marginTop: 0,
+          marginBottom: '0.5rem',
+          fontSize: '1.75rem',
+          color: '#212529',
+        }}>
+          Welcome to LBU ERP System
+        </h1>
         
         <p style={{
           fontSize: '1.1rem',
@@ -64,9 +110,52 @@ export function DemoPage() {
                 fontSize: '0.9rem',
                 wordBreak: 'break-all',
               }}>
-                {"Unknown"}
+                {subject}
               </div>
             </div>
+
+            <div>
+              <strong style={{ color: '#495057' }}>Name:</strong>
+              <div style={{ 
+                marginTop: '0.25rem',
+                padding: '0.5rem',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '4px',
+              }}>
+                {name}
+              </div>
+            </div>
+
+            {(givenName !== 'Not provided' || familyName !== 'Not provided') && (
+              <>
+                {givenName !== 'Not provided' && (
+                  <div>
+                    <strong style={{ color: '#495057' }}>Given Name:</strong>
+                    <div style={{ 
+                      marginTop: '0.25rem',
+                      padding: '0.5rem',
+                      backgroundColor: '#f8f9fa',
+                      borderRadius: '4px',
+                    }}>
+                      {givenName}
+                    </div>
+                  </div>
+                )}
+                {familyName !== 'Not provided' && (
+                  <div>
+                    <strong style={{ color: '#495057' }}>Family Name:</strong>
+                    <div style={{ 
+                      marginTop: '0.25rem',
+                      padding: '0.5rem',
+                      backgroundColor: '#f8f9fa',
+                      borderRadius: '4px',
+                    }}>
+                      {familyName}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
 
             <div>
               <strong style={{ color: '#495057' }}>Email:</strong>
@@ -76,7 +165,7 @@ export function DemoPage() {
                 backgroundColor: '#f8f9fa',
                 borderRadius: '4px',
               }}>
-                {"Not provided"}
+                {email} {typeof profile.email_verified === 'boolean' && `(Verified: ${emailVerified})`}
               </div>
             </div>
           </div>
@@ -101,10 +190,15 @@ export function DemoPage() {
           <div style={{
             fontSize: '0.9rem',
             color: '#666',
+            display: 'grid',
+            gap: '0.5rem',
           }}>
-            <div><strong>Access Token:</strong> Present ✓</div>
-            <div><strong>ID Token:</strong> Present ✓</div>
+            <div><strong>Access Token:</strong> {oidcUser.access_token ? 'Present ✓' : 'Not available'}</div>
+            <div><strong>ID Token:</strong> {oidcUser.id_token ? 'Present ✓' : 'Not available'}</div>
             <div><strong>Token Type:</strong> Bearer</div>
+            {oidcUser.expires_at && (
+              <div><strong>Expires At:</strong> {new Date(oidcUser.expires_at * 1000).toLocaleString()}</div>
+            )}
           </div>
         </div>
 
@@ -138,8 +232,10 @@ export function DemoPage() {
             overflow: 'auto',
             fontSize: '0.85rem',
             maxHeight: '400px',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
           }}>
-            ""
+            {JSON.stringify(oidcUser, null, 2)}
           </pre>
         </details>
       </div>
