@@ -167,10 +167,43 @@
             }
             
             // Concatenate company code with username in format: {companyCode}::{username}
+            // Use a hidden input to submit the combined value while keeping the visible input unchanged
             if (companyCodeInput && companyCode) {
-                const originalUsername = username;
-                const combinedUsername = `${companyCode}::${originalUsername}`;
-                usernameInput.value = combinedUsername;
+                const combinedUsername = `${companyCode}::${username}`;
+                
+                // Check if hidden input already exists, if not create it
+                let hiddenUsernameInput = form.querySelector('input[name="username"][type="hidden"]');
+                if (!hiddenUsernameInput) {
+                    // Temporarily remove name attribute from visible input so it won't be submitted
+                    // Only remove if it hasn't been removed already (check data attribute)
+                    if (!usernameInput.hasAttribute('data-original-name')) {
+                        const originalName = usernameInput.getAttribute('name') || 'username';
+                        usernameInput.setAttribute('data-original-name', originalName);
+                        usernameInput.removeAttribute('name');
+                    }
+                    
+                    // Create hidden input with the combined username value
+                    hiddenUsernameInput = document.createElement('input');
+                    hiddenUsernameInput.type = 'hidden';
+                    hiddenUsernameInput.name = 'username';
+                    form.appendChild(hiddenUsernameInput);
+                }
+                
+                // Set the hidden input value to the combined username
+                hiddenUsernameInput.value = combinedUsername;
+            } else {
+                // If no company code, ensure visible input has its name attribute for normal submission
+                // Restore name attribute if it was previously removed
+                if (usernameInput.hasAttribute('data-original-name')) {
+                    const originalName = usernameInput.getAttribute('data-original-name');
+                    usernameInput.setAttribute('name', originalName);
+                    usernameInput.removeAttribute('data-original-name');
+                }
+                // Remove any existing hidden username input
+                const existingHiddenInput = form.querySelector('input[name="username"][type="hidden"]');
+                if (existingHiddenInput) {
+                    existingHiddenInput.remove();
+                }
             }
             
             // Show loading state
@@ -183,6 +216,8 @@
             form.submitted = true;
             
             // Form will submit normally if validation passes
+            // The visible username input keeps showing the original value, while the hidden input
+            // contains the combined {companyCode}::{username} format that gets submitted
         });
     }
 
