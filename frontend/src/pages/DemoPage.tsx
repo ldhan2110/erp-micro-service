@@ -1,5 +1,6 @@
 import { useOidc, useOidcUser } from '@axa-fr/react-oidc'
 import { LogoutButton } from '../components/LogoutButton'
+import { useEffect } from 'react'
 
 /**
  * DemoPage component that displays user information after successful authentication.
@@ -8,6 +9,10 @@ import { LogoutButton } from '../components/LogoutButton'
 export function DemoPage() {
   const { isAuthenticated } = useOidc()
   const { oidcUser } = useOidcUser()
+
+  useEffect(() => {
+    console.log('oidcUser', oidcUser)
+  }, [oidcUser])
 
   // Show loading state if not authenticated
   if (!isAuthenticated) {
@@ -41,10 +46,10 @@ export function DemoPage() {
 
   // Extract user information from the OIDC user object
   // The oidcUser object has a 'profile' property containing user claims
-  const profile = oidcUser.profile || {}
+  const profile = oidcUser?.profile || {}
   const subject = profile.sub || 'Not available'
   const email = profile.email || 'Not provided'
-  const name = profile.name || profile.preferred_username || 'Not provided'
+  const name = oidcUser.name || profile.preferred_username || 'Not provided'
   const givenName = profile.given_name || 'Not provided'
   const familyName = profile.family_name || 'Not provided'
   const emailVerified = profile.email_verified ? 'Yes' : 'No'
@@ -110,7 +115,7 @@ export function DemoPage() {
                 fontSize: '0.9rem',
                 wordBreak: 'break-all',
               }}>
-                {subject}
+                {oidcUser.usr_id}
               </div>
             </div>
 
@@ -122,7 +127,7 @@ export function DemoPage() {
                 backgroundColor: '#f8f9fa',
                 borderRadius: '4px',
               }}>
-                {name}
+                {oidcUser.name}
               </div>
             </div>
 
@@ -137,7 +142,7 @@ export function DemoPage() {
                       backgroundColor: '#f8f9fa',
                       borderRadius: '4px',
                     }}>
-                      {givenName}
+                      {oidcUser.given_name}
                     </div>
                   </div>
                 )}
@@ -165,7 +170,7 @@ export function DemoPage() {
                 backgroundColor: '#f8f9fa',
                 borderRadius: '4px',
               }}>
-                {email} {typeof profile.email_verified === 'boolean' && `(Verified: ${emailVerified})`}
+                {oidcUser.email} {typeof profile.email_verified === 'boolean' && `(Verified: ${emailVerified})`}
               </div>
             </div>
           </div>

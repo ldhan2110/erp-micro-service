@@ -126,7 +126,7 @@ public class AuthorizationServerConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/webjars/**", "/error")
+                        .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/webjars/**", "/error", "/.well-known/appspecific/**")
                         .permitAll()
                         .anyRequest().authenticated()
                 )

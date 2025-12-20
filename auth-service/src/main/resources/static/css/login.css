@@ -516,6 +516,9 @@ body {
     width: 1.25rem;
     height: 1.25rem;
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
 }
 
@@ -527,9 +530,14 @@ body {
     display: block;
 }
 
-.spinner-circle,
-.spinner-path {
+.spinner-circle {
     animation: spin 1s linear infinite;
+    transform-origin: center;
+}
+
+.spinner-path {
+    animation: spin 0.8s linear infinite;
+    transform-origin: center;
 }
 
 @keyframes spin {
