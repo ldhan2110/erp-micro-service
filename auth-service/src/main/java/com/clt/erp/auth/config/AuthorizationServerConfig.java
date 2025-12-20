@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +31,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.oidc.authentication.OidcUserInfoAuthenticationContext;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
@@ -46,12 +46,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.lang.reflect.Method;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -102,7 +102,7 @@ public class AuthorizationServerConfig {
                 .with(authorizationServerConfigurer, (authorizationServer) -> authorizationServer
                         .oidc(oidc -> oidc
                                 .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                        .userInfoMapper(this::mapUserInfoFromContext)
+                                        .userInfoMapper(context -> mapUserInfoFromContext(context))
                                 )
                         ))
                 .exceptionHandling(exceptions -> exceptions
@@ -111,8 +111,7 @@ public class AuthorizationServerConfig {
                                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                         )
                 )
-                .formLogin(form -> form.loginPage("/login"))
-                .oauth2ResourceServer(resourceServer -> resourceServer.jwt(Customizer.withDefaults()));
+                .formLogin(form -> form.loginPage("/login"));
 
         return http.build();
     }
@@ -247,9 +246,9 @@ public class AuthorizationServerConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000",
-                "http://localhost:4000"
+        corsConfig.setAllowedOriginPatterns(List.of(
+            "http://localhost:*",
+            "https://*.erp.com"
         ));
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         corsConfig.setAllowedHeaders(Arrays.asList("*"));
@@ -273,12 +272,10 @@ public class AuthorizationServerConfig {
      * Note: Uses reflection to access Spring Security's internal OidcUserInfoAuthenticationContext
      * API, as the class is not publicly accessible.
      */
-    private OidcUserInfo mapUserInfoFromContext(Object context) {
+    private OidcUserInfo mapUserInfoFromContext(OidcUserInfoAuthenticationContext  context) {
         try {
             // Access getAuthorization() method via reflection
-            Method getAuthorizationMethod = context.getClass().getMethod("getAuthorization");
-            OAuth2Authorization authorization = (OAuth2Authorization) getAuthorizationMethod.invoke(context);
-            
+            OAuth2Authorization authorization = context.getAuthorization();
             if (authorization != null) {
                 Object principal = authorization.getAttribute("java.security.Principal");
                 if (principal instanceof Authentication) {
@@ -287,8 +284,7 @@ public class AuthorizationServerConfig {
             }
 
             // Fallback: extract from JWT token claims
-            Method getAuthenticationMethod = context.getClass().getMethod("getAuthentication");
-            Authentication authentication = (Authentication) getAuthenticationMethod.invoke(context);
+            Authentication authentication = context.getAuthentication();
             JwtAuthenticationToken jwtAuth = (JwtAuthenticationToken) authentication.getPrincipal();
             return new OidcUserInfo(jwtAuth.getToken().getClaims());
         } catch (Exception e) {
