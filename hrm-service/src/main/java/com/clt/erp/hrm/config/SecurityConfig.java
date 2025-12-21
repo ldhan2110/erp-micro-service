@@ -10,12 +10,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Security configuration for HRM Service.
@@ -42,17 +36,18 @@ public class SecurityConfig {
     /**
      * Security filter chain that configures OAuth2 resource server.
      * All endpoints require authentication via JWT token.
+     * 
+     * Note: CORS is handled by the API Gateway, so no CORS configuration is needed here.
+     * This service is accessed through the gateway, which adds CORS headers.
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .cors(cors -> cors.disable()) // Disable CORS - handled by API Gateway
             .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless API (JWT tokens)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Allow OPTIONS requests for CORS preflight
-                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                // All other endpoints require authentication
+                // All endpoints require authentication
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2
@@ -67,26 +62,5 @@ public class SecurityConfig {
             );
 
         return http.build();
-    }
-
-    /**
-     * CORS configuration to allow requests from frontend and API gateway.
-     */
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOriginPatterns(List.of(
-            "http://localhost:*",
-            "https://*.erp.com"
-        ));
-        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        corsConfig.setAllowedHeaders(Arrays.asList("*"));
-        corsConfig.setAllowCredentials(true);
-        corsConfig.setExposedHeaders(Arrays.asList("Authorization"));
-        corsConfig.setMaxAge(3600L);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfig);
-        return source;
     }
 }

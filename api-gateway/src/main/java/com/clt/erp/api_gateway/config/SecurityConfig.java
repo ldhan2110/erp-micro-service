@@ -84,9 +84,9 @@ public class SecurityConfig {
      */
     private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(List.of(
-            "http://localhost:3000",
-            "http://localhost:4000"
+        corsConfig.setAllowedOriginPatterns(List.of(
+            "http://localhost:*",
+            "https://*.erp.com"
         ));
         corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         corsConfig.setAllowedHeaders(List.of("*"));

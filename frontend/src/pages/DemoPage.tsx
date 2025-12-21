@@ -1,5 +1,6 @@
 import { useOidc, useOidcUser } from '@axa-fr/react-oidc'
 import { LogoutButton } from '../components/LogoutButton'
+import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 
 /**
@@ -211,7 +212,30 @@ export function DemoPage() {
           display: 'flex',
           justifyContent: 'center',
           gap: '1rem',
+          flexWrap: 'wrap',
         }}>
+          <Link
+            to="/employees"
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: '#007bff',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '4px',
+              fontSize: '1rem',
+              fontWeight: 500,
+              display: 'inline-block',
+              transition: 'background-color 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#0056b3'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#007bff'
+            }}
+          >
+            View Employees
+          </Link>
           <LogoutButton />
         </div>
 
