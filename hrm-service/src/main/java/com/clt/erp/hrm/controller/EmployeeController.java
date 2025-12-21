@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * REST controller for Employee management endpoints.
  * All endpoints require OAuth2 authentication via JWT token.
+ * User information is automatically logged by UserLoggingFilter for all requests.
  */
 @RestController
 @RequestMapping("/employees")
@@ -26,6 +27,7 @@ public class EmployeeController {
     /**
      * Retrieves a list of all employees.
      * Requires valid JWT token from auth-service.
+     * User information is automatically logged by UserLoggingFilter.
      * 
      * @return ResponseEntity containing list of employees
      */
