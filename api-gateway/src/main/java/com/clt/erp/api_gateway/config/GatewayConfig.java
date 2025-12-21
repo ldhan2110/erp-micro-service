@@ -41,12 +41,10 @@ public class GatewayConfig {
                         .uri("lb://auth-service"))
                 
                 // HRM Service - forwards Authorization header
+                // Note: HRM service has context-path=/api/hrm, so we forward the full path
                 .route("hrm-service", r -> r
                         .path("/api/hrm/**")
-                        .filters(f -> f
-                                .rewritePath("/api/hrm/(?<segment>.*)", "/${segment}")
-                                // Token is automatically forwarded in Authorization header
-                        )
+                        // Token is automatically forwarded in Authorization header
                         .uri("lb://hrm-service")) // Using service discovery
                 
                 // Other services follow the same pattern
